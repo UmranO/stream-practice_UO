@@ -37,139 +37,216 @@ public class Practice {
     // Above services have all the required methods.
     // Also, you can check all the methods in the ServiceImpl classes inside the service.impl package, they all have explanations.
 
-    // Display all the employees
+//--Display all the employees-------------------------------------------------------------------------------------------
     public static List<Employee> getAllEmployees() {
         return employeeService.readAll();
     }
 
-    // Display all the countries
+//--Display all the countries-------------------------------------------------------------------------------------------
     public static List<Country> getAllCountries() {
         return countryService.readAll();
     }
 
-    // Display all the departments
+//--Display all the departments-----------------------------------------------------------------------------------------
     public static List<Department> getAllDepartments() {
         return departmentService.readAll();
     }
 
-    // Display all the jobs
+//--Display all the jobs------------------------------------------------------------------------------------------------
     public static List<Job> getAllJobs() {
         return jobService.readAll();
     }
 
-    // Display all the locations
+//--Display all the locations-------------------------------------------------------------------------------------------
     public static List<Location> getAllLocations() {
         return locationService.readAll();
     }
 
-    // Display all the regions
+//--Display all the regions---------------------------------------------------------------------------------------------
     public static List<Region> getAllRegions() {
         return regionService.readAll();
     }
 
-    // Display all the job histories
+//--Display all the job histories---------------------------------------------------------------------------------------
     public static List<JobHistory> getAllJobHistories() {
      return jobHistoryService.readAll();
     }
 
-    // Display all the employees' first names
+//--Display all the employees' first names------------------------------------------------------------------------------
     public static List<String> getAllEmployeesFirstName() {
        return employeeService.readAll().stream().map(Employee::getFirstName).collect(Collectors.toList());
     }
 
-    // Display all the countries' names
+//--Display all the countries' names------------------------------------------------------------------------------------
     public static List<String> getAllCountryNames() {
         return countryService.readAll().stream().map(Country::getCountryName).collect(Collectors.toList());
     }
 
-    // Display all the departments' managers' first names
+//--Display all the departments' managers' first names------------------------------------------------------------------
     public static List<String> getAllDepartmentManagerFirstNames() {
        return departmentService.readAll().stream()
                .map(Department::getManager).map(man->man.getFirstName()).collect(Collectors.toList());
                    }
 
-    // Display all the departments where manager name of the department is 'Steven'
+//--Display all the departments where manager name of the department is 'Steven'----------------------------------------
     public static List<Department> getAllDepartmentsWhichManagerFirstNameIsSteven() {
         return departmentService.readAll().stream()
                 .filter(x->x.getManager().getFirstName().equals("Steven")).collect(Collectors.toList());
     }
 
-    // Display all the departments where postal code of the location of the department is '98199'
+//--Display all the departments where postal code of the location of the department is '98199'--------------------------
     public static List<Department> getAllDepartmentsWhereLocationPostalCodeIs98199() {
        return departmentService.readAll().stream()
                .filter(x->x.getLocation().getPostalCode().equals("98199")).collect(Collectors.toList());
     }
 
-    // Display the region of the IT department
+//--Display the region of the IT department-----------------------------------------------------------------------------
     public static Region getRegionOfITDepartment() throws Exception {
-
+                                                                                                   //alternative(alt)1
 //        return getAllDepartments().stream()
 //                .filter(department -> department.getDepartmentName().equals("IT"))
 //                .findFirst().get().getLocation().getCountry().getRegion();
 
-        return getAllDepartments().stream()
+        return getAllDepartments().stream()                                                            //alt2
                 .filter(department -> department.getDepartmentName().equals("IT"))
                 .findFirst().orElseThrow(() -> new Exception("No department found!"))
                 .getLocation().getCountry().getRegion();
 
     }
 
-    // Display all the departments where the region of department is 'Europe'
+//--Display all the departments where the region of department is 'Europe'----------------------------------------------
     public static List<Department> getAllDepartmentsWhereRegionOfCountryIsEurope() {
         return departmentService.readAll().stream()
-                .filter(department -> department.getLocation().getCountry().getRegion().equals("Europe")).collect(Collectors.toList());
+                .filter(department -> department.getLocation().getCountry().getRegion().equals("Europe"))
+                .collect(Collectors.toList());
     }
 
-    // Display if there is any employee with salary less than 1000. If there is none, the method should return true
+//--Display if there is any employee with salary less than 1000. If there is none, the method should return true--------
     public static boolean checkIfThereIsNoSalaryLessThan1000() {
-    //   return employeeService.readAll().stream().allMatch(employee -> employee.getSalary() > 1000);
-    //   return employeeService.readAll().stream().noneMatch((employee -> employee.getSalary()<1000));
+    //   return employeeService.readAll().stream().allMatch(employee -> employee.getSalary() > 1000);              alt1
+    //   return employeeService.readAll().stream().noneMatch((employee -> employee.getSalary()<1000));             alt2
 
-        return !getAllEmployees().stream()
+        return !getAllEmployees().stream()                                                                        //alt3
                 .anyMatch(employee -> employee.getSalary() < 1000);
     }
 
-    // Check if the salaries of all the employees in IT department are greater than 2000 (departmentName: IT)
+//--Check if the salaries of all the employees in IT department are greater than 2000 (departmentName: IT)--------------
     public static boolean checkIfThereIsAnySalaryGreaterThan2000InITDepartment() {
-        return employeeService.readAll().stream()
-                .filter(employee -> employee.getDepartment().getDepartmentName().equals("IT"))
+        return employeeService.readAll().stream()                                                                 //alt1
+                .filter(employee -> employee.getDepartment().getDepartmentName().equals("IT")) //At this point we have all IT employees
                 .allMatch(x->x.getSalary()>2000);
+
+//         return getAllEmployees().stream().filter(employee -> employee.getDepartment().equals("IT"))              alt2
+//                 .noneMatch(employee -> employee.getSalary()<2000);
+
+//            return getAllEmployees().stream()                                                                     alt3
+//                    .filter(employee -> employee.getDepartment().getDepartmentName().equals("IT"))
+//                    .map(Employee::getSalary)
+//                    .noneMatch(salary -> salary < 2000);
+
+//        return !getAllEmployees().stream().filter(employee -> employee.getDepartment().equals("IT"))              alt4
+//                .anyMatch(employee -> employee.getSalary()<2000);
+
     }
 
-    // Display all the employees whose salary is less than 5000
+//--Display all the employees whose salary is less than 5000------------------------------------------------------------
     public static List<Employee> getAllEmployeesWithLessSalaryThan5000() {
         return employeeService.readAll().stream()
                 .filter(employee -> employee.getSalary()<5000).collect(Collectors.toList());
     }
 
-    // Display all the employees whose salary is between 6000 and 7000
+//--Display all the employees whose salary is between 6000 and 7000-----------------------------------------------------
     public static List<Employee> getAllEmployeesSalaryBetween() {
-        return employeeService.readAll().stream().filter(employee -> employee.getSalary()>=6000 && employee.getSalary()<=7000 )
+                                                                                                                 //alt1
+//        return getAllEmployees().stream().filter(employee -> employee.getSalary()>6000 && employee.getSalary()<7000 )
+//                .collect(Collectors.toList());
+
+          return getAllEmployees().stream()                                                                      //alt2
+                .filter(employee -> employee.getSalary() > 6000)
+                .filter(employee -> employee.getSalary() < 7000)
                 .collect(Collectors.toList());
     }
-    // Display the salary of the employee Grant Douglas (lastName: Grant, firstName: Douglas)
+
+//--Display the salary of the employee Grant Douglas (lastName: Grant, firstName: Douglas)------------------------------
     public static Long getGrantDouglasSalary() throws Exception {
         return getAllEmployees().stream()
-                .filter(x->x.getLastName().equals("Douglas") && x.getFirstName().equals("Grant"))
-                        .findFirst().orElseThrow(()->new Exception("No employee found!")).getSalary();
+                .filter(x->x.getLastName().equals("Grant") && x.getFirstName().equals("Douglas"))
+                .findFirst().orElseThrow(()->new Exception("No employee found!")).getSalary();
+    }
+
+//--Display the maximum salary an employee gets-------------------------------------------------------------------------
+//   public static Long getMaxSalary() throws Exception {   orjinali bu ama bu haliyle sonraki ()'da kullanirsak exception'i
+//                                                          handle etmemiz gerekiyor o yuuzden burada throws'u sildi 1:41:18
+     public static Long getMaxSalary() {
+//---------------------------------------alt1--------------------------------------------------
+//        return getAllEmployees().stream()
+//                .sorted(Comparator.comparing(Employee::getSalary).reversed())
+//                .findFirst().get().getSalary();
+//---------------------------------------alt2--------------------------------------------------
+//        return getAllEmployees().stream()
+//                .sorted(Comparator.comparing(Employee::getSalary).reversed())
+//                .limit(1).collect(Collectors.toList()).get(0).getSalary();
+//---------------------------------------alt3--------------------------------------------------
+//          return getAllEmployees().stream()
+//                  .max(Comparator.comparing(Employee::getSalary))   Give a Comparator to max()which will return us
+//                  .get().getSalary();                               the max value.Bascally we'll give direction to the
+//                                                                    ()what it needs to compare.Here it needs to compare
+                                                                    //the salaries.We have to provide this info to the ()
+                                                                    //To do that we can use Comparator.comparing() & say
+                                                                    //that we'll compare based on employee salaries.&
+                                                                    //after the comparison is completed give me the max. one
+                                                                    //Since max() returns optional we use get() or orElse()
+                                                                    //orElseThrow()..
+//---------------------------------------alt4--------------------------------------------------
+
+//          return getAllEmployees().stream()
+//                    .map(Employee::getSalary)
+//                    .reduce((sal1,sal2)-> (sal1>sal2)? sal1 :sal2)                //Bec.if we don't give an initial value
+//                    .get();                                                       //reduce() returns optional()
+
+//yukardakinda ternary'de () var asagidakinde yok
+
+//        return getAllEmployees().stream()
+//                .map(Employee::getSalary)
+//                .reduce((salary1, salary2) -> salary1 > salary2 ? salary1 : salary2)
+//                .get();
+
+//---------------------------------------alt5--------------------------------------------------
+//        return getAllEmployees().stream()
+//                .map(Employee::getSalary)
+//                .reduce(Long::max)
+//                .get();
+//---------------------------------------alt6--------------------------------------------------
+//        return getAllEmployees().stream()
+//                .map(Employee::getSalary)
+//                .collect(Collectors.maxBy(Comparator.comparing(Long::longValue))).get();
+
+//---------------------------------------alt7--------------------------------------------------
+      return getAllEmployees().stream()
+                .collect(Collectors.maxBy(Comparator.comparing(Employee::getSalary))).get().getSalary();
+
+//---------------------------------------alt8--------------------------------------------------
+//        return getAllEmployees().stream()
+//                .map(Employee::getSalary)
+//                .mapToLong(i -> i)
+//                .max().getAsLong();
+//---------------------------------------alt9--------------------------------------------------
+//        return getAllEmployees().stream()
+//                .sorted(Comparator.comparing(Employee::getSalary).reversed())
+//                .map(Employee::getSalary)
+//                .findFirst()
+//                .get();
 
     }
 
-    // Display the maximum salary an employee gets
-    public static Long getMaxSalary() throws Exception {
-        return getAllEmployees().stream()
-                .sorted(Comparator.comparing(Employee::getSalary).reversed())
-                .findFirst().get().getSalary();
-
-    }
-
-    // Display the employee(s) who gets the maximum salary
+//--Display the employee(s) who gets the maximum salary-----------------------------------------------------------------
     public static List<Employee> getMaxSalaryEmployee() {
-        //TODO Implement the method
-        return new ArrayList<>();
+        return getAllEmployees().stream()
+                .filter(employee -> employee.getSalary().equals(getMaxSalary()))
+                .collect(Collectors.toList());
     }
 
-    // Display the max salary employee's job
+//--Display the max salary employee's job-------------------------------------------------------------------------------
     public static Job getMaxSalaryEmployeeJob() throws Exception {
         //TODO Implement the method
         return new Job();
