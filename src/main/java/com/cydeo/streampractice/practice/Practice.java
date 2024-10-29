@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class Practice {
@@ -76,8 +77,7 @@ public class Practice {
 
     // Display all the employees' first names
     public static List<String> getAllEmployeesFirstName() {
-        //TODO Implement the method
-        return new ArrayList<>();
+       return employeeService.readAll().stream().map(Employee::getFirstName).collect(Collectors.toList());
     }
 
     // Display all the countries' names
