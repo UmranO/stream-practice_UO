@@ -244,12 +244,31 @@ public class Practice {
         return getAllEmployees().stream()
                 .filter(employee -> employee.getSalary().equals(getMaxSalary()))
                 .collect(Collectors.toList());
+
+
+//        Note: We can create stream from optional class
+//        For this project, the one below works,
+//        but it is a chance for it to not work if there is multiple object that is matching with the condition
+
+//UO:The below one bir work around gibi oldugu icin CT cok sevmiyormus, yukardakini kullan
+//Burada max() returning Optional. Optional class has a stream() inside of it like we did in the List. So we can get the
+//max salary & put it into Optional & then put it into stream again. And from the stream what we can do? -We can convert
+//streams to Lists.So we got the max salaried Employee then we put it back into stream just bec.we want to put it in a List
+//max method only returns 1. If there are more than 1 employee with the same maximum salary this code won't show all of them.
+//The max method only returns a single Optional result, which represents one of the employees with the highest salary.
+//It does not handle multiple employees with the same maximum salary. So, if there are multiple employees with the same
+//highest salary, your current code will return only one of them (the first one it encounters based on the stream order)
+//and ignore any others.
+
+//        return getAllEmployees().stream()
+//                .max(Comparator.comparing(Employee::getSalary))
+//                .stream().collect(Collectors.toList());
     }
 
 //--Display the max salary employee's job-------------------------------------------------------------------------------
     public static Job getMaxSalaryEmployeeJob() throws Exception {
-        //TODO Implement the method
-        return new Job();
+        return getMaxSalaryEmployee().stream().findFirst().map(Employee::getJob).get();
+
     }
 
     // Display the max salary in Americas Region
