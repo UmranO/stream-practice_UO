@@ -87,14 +87,13 @@ public class Practice {
 
     // Display all the departments' managers' first names
     public static List<String> getAllDepartmentManagerFirstNames() {
-        //TODO Implement the method
-        return new ArrayList<>();
-    }
+       return departmentService.readAll().stream()
+               .map(Department::getManager).map(man->man.getFirstName()).collect(Collectors.toList());
+                   }
 
     // Display all the departments where manager name of the department is 'Steven'
     public static List<Department> getAllDepartmentsWhichManagerFirstNameIsSteven() {
-        //TODO Implement the method
-        return new ArrayList<>();
+        return departmentService.readAll().stream().filter(x->x.getManager().getFirstName().equals("Steven")).collect(Collectors.toList());
     }
 
     // Display all the departments where postal code of the location of the department is '98199'
