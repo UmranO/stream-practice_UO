@@ -82,8 +82,7 @@ public class Practice {
 
     // Display all the countries' names
     public static List<String> getAllCountryNames() {
-        //TODO Implement the method
-        return new ArrayList<>();
+        return countryService.readAll().stream().map(Country::getCountryName).collect(Collectors.toList());
     }
 
     // Display all the departments' managers' first names
