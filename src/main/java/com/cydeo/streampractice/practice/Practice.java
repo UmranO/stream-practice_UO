@@ -61,8 +61,7 @@ public class Practice {
 
     // Display all the locations
     public static List<Location> getAllLocations() {
-        //TODO Implement the method
-        return new ArrayList<>();
+        return locationService.readAll();
     }
 
     // Display all the regions
