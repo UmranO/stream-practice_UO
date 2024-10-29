@@ -93,13 +93,14 @@ public class Practice {
 
     // Display all the departments where manager name of the department is 'Steven'
     public static List<Department> getAllDepartmentsWhichManagerFirstNameIsSteven() {
-        return departmentService.readAll().stream().filter(x->x.getManager().getFirstName().equals("Steven")).collect(Collectors.toList());
+        return departmentService.readAll().stream()
+                .filter(x->x.getManager().getFirstName().equals("Steven")).collect(Collectors.toList());
     }
 
     // Display all the departments where postal code of the location of the department is '98199'
     public static List<Department> getAllDepartmentsWhereLocationPostalCodeIs98199() {
-        //TODO Implement the method
-        return new ArrayList<>();
+       return departmentService.readAll().stream()
+               .filter(x->x.getLocation().getPostalCode().equals("98199")).collect(Collectors.toList());
     }
 
     // Display the region of the IT department
