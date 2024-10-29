@@ -161,8 +161,6 @@ public class Practice {
                 .sorted(Comparator.comparing(Employee::getSalary).reversed())
                 .findFirst().get().getSalary();
 
-
-
     }
 
     // Display the employee(s) who gets the maximum salary
