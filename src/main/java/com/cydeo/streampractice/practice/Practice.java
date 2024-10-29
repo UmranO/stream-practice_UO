@@ -267,26 +267,43 @@ public class Practice {
 
 //--Display the max salary employee's job-------------------------------------------------------------------------------
     public static Job getMaxSalaryEmployeeJob() throws Exception {
-        return getMaxSalaryEmployee().stream().findFirst().map(Employee::getJob).get();
+        return getMaxSalaryEmployee().get(0).getJob();
 
     }
 
     // Display the max salary in Americas Region
     public static Long getMaxSalaryInAmericasRegion() throws Exception {
-        //TODO Implement the method
-        return 1L;
+        return getAllEmployees().stream()
+                .filter(employee->employee.getDepartment().getLocation().getCountry().getRegion().getRegionName().equals("Americas"))
+                .max(Comparator.comparing(Employee::getSalary))                        //This is the terminal operator
+                .get().getSalary();
     }
 
-    // Display the second maximum salary an employee gets
+//--Display the second maximum salary an employee gets------------------------------------------------------------------
+  //-------------------------------------alt1-------------------------------------------------------
     public static Long getSecondMaxSalary() throws Exception {
-        //TODO Implement the method
-        return 1L;
+//        return getAllEmployees().stream()
+//                .sorted(Comparator.comparing(Employee::getSalary).reversed())
+//                .map(Employee::getSalary)
+//                .distinct()                                                     //if there are more than 1 person with
+//                .skip(1)                                                     //THE MAX.SALARY this will only consider
+//                .findFirst().get();                                             //1 of many. So won't result in logic error
+   //-------------------------------------alt2-------------------------------------------------------
+         return getAllEmployees().stream()
+                 .filter(employee -> employee.getSalary().compareTo(getMaxSalary())<0)     //since we are comparing Long
+                 .sorted(Comparator.comparing(Employee::getSalary).reversed())       //objects we can't use <> operators
+                 .findFirst().get().getSalary();
+
     }
 
-    // Display the employee(s) who gets the second maximum salary
+//--Display the employee(s) who gets the second maximum salary----------------------------------------------------------
     public static List<Employee> getSecondMaxSalaryEmployee() {
-        //TODO Implement the method
-        return new ArrayList<>();
+        return getAllEmployees().stream()
+                .filter(employee -> { try{return employee.getSalary().equals(getSecondMaxSalary());}
+                catch (Exception e){
+                throw new RuntimeException(e);}
+                }).collect(Collectors.toList());
+
     }
 
     // Display the minimum salary an employee gets
