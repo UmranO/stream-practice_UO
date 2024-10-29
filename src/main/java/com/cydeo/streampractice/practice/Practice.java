@@ -66,14 +66,12 @@ public class Practice {
 
     // Display all the regions
     public static List<Region> getAllRegions() {
-        //TODO Implement the method
-        return new ArrayList<>();
+        return regionService.readAll();
     }
 
     // Display all the job histories
     public static List<JobHistory> getAllJobHistories() {
-        //TODO Implement the method
-        return new ArrayList<>();
+     return jobHistoryService.readAll();
     }
 
     // Display all the employees' first names
