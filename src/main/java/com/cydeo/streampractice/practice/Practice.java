@@ -288,40 +288,62 @@ public class Practice {
 //                .distinct()                                                     //if there are more than 1 person with
 //                .skip(1)                                                     //THE MAX.SALARY this will only consider
 //                .findFirst().get();                                             //1 of many. So won't result in logic error
-   //-------------------------------------alt2-------------------------------------------------------
-         return getAllEmployees().stream()
-                 .filter(employee -> employee.getSalary().compareTo(getMaxSalary())<0)     //since we are comparing Long
-                 .sorted(Comparator.comparing(Employee::getSalary).reversed())       //objects we can't use <> operators
-                 .findFirst().get().getSalary();
+//-------------------------------------alt2-------------------------------------------------------
+//        return getAllEmployees().stream()
+//                .filter(employee -> employee.getSalary().compareTo(getMaxSalary()) < 0) //since we are comparing Long
+//                .sorted(Comparator.comparing(Employee::getSalary).reversed())       //objects we can't use <> operators
+//                .findFirst().get().getSalary();                                     //if the 1st one is smaller than the
+                                                                                    //the MaxSalary it means compareTo()
+                                                                                    //will return -1 so we'llend up with
+                                                                                    //salaries smaller than the max salary
+//-------------------------------------alt3-------------------------------------------------------
 
-    }
-
-//--Display the employee(s) who gets the second maximum salary----------------------------------------------------------
-    public static List<Employee> getSecondMaxSalaryEmployee() {
         return getAllEmployees().stream()
-                .filter(employee -> { try{return employee.getSalary().equals(getSecondMaxSalary());}
-                catch (Exception e){
-                throw new RuntimeException(e);}
-                }).collect(Collectors.toList());
+                .filter(employee -> employee.getSalary().compareTo(getMaxSalary()) < 0)     //since we are comparing Long
+                .sorted(Comparator.comparing(Employee::getSalary).reversed())       //objects we can't use <> operators
+                .findFirst().orElseThrow(()->new Exception("No employee found!")).getSalary();                                     //if the 1st one is smaller than the
+
 
     }
+//--Display the employee(s) who gets the second maximum salary----------------------------------------------------------
+    public static List<Employee> getSecondMaxSalaryEmployee() {                     //We already know how much is 2nd Max
+        return getAllEmployees().stream()                                           //salary. So we'll filter with that info
+                .filter(employee -> { try{return employee.getSalary().equals(getSecondMaxSalary());} //Since getSecondMaxSalary()
+                catch (Exception e){                                               //throws Exception we need to handle
+                throw new RuntimeException(e);}                                    //it here too.We handled the possible
+                }).collect(Collectors.toList());                                   //exception with throws keyword in
+                                                                                   //the g2ndMSala() itself. But when
+                                                                                   //we call it here we need to handle
+                                                                                   //it here too. 2:13:32
 
+    }                                        //Soru: Will it aklso work if the 2nd() also use throws kword?
+                                             //CT:NO!Since here we're in a Stream & working with Lambdas which don't have
+                                             //method signature,they just have Parameters and body so we can't put throws
+                                             //keyword/this structure in Lambda so that's why we should use try&catch
+                                             //If getSecondMaxSalary() was called outside Stream then we could use throws
     // Display the minimum salary an employee gets
-    public static Long getMinSalary() throws Exception {
-        //TODO Implement the method
-        return 1L;
-    }
+    public static Long getMinSalary()  {
+        return getAllEmployees().stream()
+                .sorted(Comparator.comparing(Employee::getSalary))
+                .findFirst().get().getSalary();                      //We can use all the()s we came up with the maxSalary
+    }                                                                //here with changin the logic
 
     // Display the employee(s) who gets the minimum salary
     public static List<Employee> getMinSalaryEmployee() {
-        //TODO Implement the method
-        return new ArrayList<>();
+        return getAllEmployees().stream()
+                .filter(employee -> employee.getSalary().equals(getMinSalary()))
+                .collect(Collectors.toList());
+
     }
 
     // Display the second minimum salary an employee gets
     public static Long getSecondMinSalary() throws Exception {
-        //TODO Implement the method
-        return 1L;
+       return getAllEmployees().stream()
+               .sorted(Comparator.comparing(Employee::getSalary))
+               .distinct()
+               .skip(1)
+               .findFirst().get().getSalary();
+
     }
 
     // Display the employee(s) who gets the second minimum salary
