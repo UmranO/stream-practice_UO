@@ -504,8 +504,8 @@ public class Practice {
                 .filter(history->history.getStartDate().equals(LocalDate.of(2007,1,1)) &&
                                  history.getEndDate().equals(LocalDate.of(2007,12,31)) &&
                                  history.getDepartment().getDepartmentName().equals("Shipping"))
-                .findAny().get().getEmployee();
-    }
+                .findAny().get().getEmployee();                                                          //3:03:41
+    }                                                //get() gets me the JobHistory object.Then we can get the Employee
 //--Display all the employees whose first name starts with 'A'----------------------------------------------------------
     public static List<Employee> getAllEmployeesFirstNameStartsWithA() {
         return getAllEmployees().stream()
